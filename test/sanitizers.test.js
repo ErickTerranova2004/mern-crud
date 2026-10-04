@@ -25,6 +25,21 @@ describe('sanitizers', () => {
   });
 });
 
+describe('regresión del hotfix (valores que no son texto)', () => {
+  test('email numérico no lanza error', () => {
+    expect(() => sanitizers.email(12345)).not.toThrow();
+    expect(sanitizers.email(12345)).toBe('12345');
+  });
+
+  test('name numérico no lanza error', () => {
+    expect(() => sanitizers.name(987)).not.toThrow();
+  });
+
+  test('email con espacios se recorta', () => {
+    expect(sanitizers.email('  USER@Mail.com ')).toBe('user@mail.com');
+  });
+});
+
 describe('validateAge', () => {
   test('rechaza menores de 5 años', () => {
     expect(validateAge(4)).toMatch(/too young/);

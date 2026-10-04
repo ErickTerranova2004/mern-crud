@@ -2,8 +2,8 @@ const stringCapitalizeName = require('string-capitalize-name');
 
 // Sanitization functions
 const sanitizers = {
-  name: (name) => stringCapitalizeName(name),
-  email: (email) => email.toLowerCase(),
+  name: (name) => stringCapitalizeName(String(name).trim()),
+  email: (email) => String(email).trim().toLowerCase(),
   age: (age) => {
     if (age === '') return '';
     if (isNaN(age)) return '';

@@ -1,7 +1,7 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
-const stringCapitalizeName = require('string-capitalize-name');
 const User = require('../models/user');
+const { validateAge, sanitizeUser } = require('../utils/sanitizers');
 
 const router = express.Router();
 
@@ -16,26 +16,6 @@ const postLimiter = rateLimit({
     });
   }
 });
-
-// Sanitization functions
-const sanitizers = {
-  name: (name) => stringCapitalizeName(String(name).trim()),
-  email: (email) => String(email).trim().toLowerCase(),
-  age: (age) => {
-    if (age === '') return '';
-    if (isNaN(age)) return '';
-    return parseInt(age);
-  },
-  gender: (gender) => (gender === 'm' || gender === 'f') ? gender : ''
-};
-
-// Validation helper
-const validateAge = (age) => {
-  if (age === '') return null;
-  if (age < 5) return 'You\'re too young for this.';
-  if (age > 130) return 'You\'re too old for this.';
-  return null;
-};
 
 // Error handler for validation errors
 const handleValidationError = (err, res) => {
@@ -56,14 +36,6 @@ const formatUser = (user) => ({
   email: user.email,
   age: user.age,
   gender: user.gender
-});
-
-// Sanitize request body
-const sanitizeUser = (body) => ({
-  name: sanitizers.name(body.name || ''),
-  email: sanitizers.email(body.email || ''),
-  age: sanitizers.age(body.age),
-  gender: sanitizers.gender(body.gender || '')
 });
 
 // GET single user

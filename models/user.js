@@ -23,11 +23,17 @@ const emailValidator = [
 ];
 
 const ageValidator = [
-  // TODO: Make some validations here...
+  validate({
+    validator: (value) => value === undefined || value === null || (Number.isInteger(value) && value >= 5 && value <= 130),
+    message: 'Age must be a whole number between 5 and 130.'
+  })
 ];
 
 const genderValidator = [
-  // TODO: Make some validations here...
+  validate({
+    validator: (value) => ['', 'm', 'f'].includes(value),
+    message: 'Gender must be "m" or "f".'
+  })
 ];
 
 // Define the database model
